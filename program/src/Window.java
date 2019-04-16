@@ -1,5 +1,7 @@
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.sql.SQLException;
 
 /**
@@ -28,12 +30,12 @@ public class Window extends JFrame {
 
         topPanel = new JPanel();
         searchButton = new JButton("Search");
+        searchButton.addActionListener(searchFunction());
         searchField = new JTextField(35);
         settingsButton = new JButton("Settings");
 
         centerPanel = new JPanel();
-        try { searchResult = new JTextArea(server.simpleRead());
-        } catch (SQLException ignored) {}
+        searchResult = new JTextArea();
         topPanel.add(searchField);
         topPanel.add(searchButton);
         topPanel.add(settingsButton);
@@ -41,4 +43,16 @@ public class Window extends JFrame {
         getContentPane().add(topPanel, BorderLayout.NORTH);
         getContentPane().add(searchResult, BorderLayout.CENTER);
     }
+
+    private ActionListener searchFunction() {
+        return new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                try { searchResult.append(server.simpleRead());
+                } catch (SQLException e) {System.out.println("Failed to read");}
+            }
+        };
+    }
+
+
 }

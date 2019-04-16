@@ -30,6 +30,7 @@ public class SQLServer {
 
         System.out.println("Connecting...");
         conn = (Connection) dataSource.getConnection();
+        System.out.println("Connected");
     }
 
     public String simpleRead() throws SQLException {
@@ -56,6 +57,7 @@ public class SQLServer {
             }
         }
 
+        System.out.println("Built "+list.size()+" items");
         return list.toString().replaceAll(",","\n");
     }
 }
