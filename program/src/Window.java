@@ -3,6 +3,8 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Window class which contains the main window and starting page
@@ -17,8 +19,9 @@ public class Window extends JFrame {
     private JTextField searchField;
     private JButton settingsButton;
 
-    private JPanel centerPanel;
-    private JTextArea searchResult;
+    private DefaultListModel<TupleResult> listModel;
+    private JList searchList;
+    private JScrollPane listScroll;
 
     /**
      * Set up content of the window
@@ -34,25 +37,42 @@ public class Window extends JFrame {
         searchField = new JTextField(35);
         settingsButton = new JButton("Settings");
 
-        centerPanel = new JPanel();
-        searchResult = new JTextArea();
+        listModel = new DefaultListModel();
+        searchList = new JList(listModel);
+        listScroll = new JScrollPane(searchList);
+
         topPanel.add(searchField);
         topPanel.add(searchButton);
         topPanel.add(settingsButton);
 
-        getContentPane().add(topPanel, BorderLayout.NORTH);
-        getContentPane().add(searchResult, BorderLayout.CENTER);
+        add(topPanel, BorderLayout.NORTH);
+        add(listScroll, BorderLayout.CENTER);
     }
 
+    /**
+     * action listener for the search button
+     * @return
+     */
     private ActionListener searchFunction() {
         return new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
-                try { searchResult.append(server.simpleRead());
+                try {
+                    ArrayList<TupleResult> resultList = server.simpleRead();
+                    populateList(resultList);
                 } catch (SQLException e) {System.out.println("Failed to read");}
             }
         };
     }
 
-
+    /**
+     * function to populate the results into the list
+     * @param list
+     */
+    private void populateList(List<TupleResult> list){
+        listModel.clear();
+        for (TupleResult i : list){
+            listModel.addElement(i);
+        }
+    }
 }

@@ -16,9 +16,17 @@ public class SQLServer {
     private Statement stmt;
     private ResultSet result;
 
+    /**
+     * no args constructor
+     */
     SQLServer(){
     }
 
+    /**
+     * set up the connection to a server
+     * @param address
+     * @throws SQLException
+     */
     public void connectTo(String address) throws SQLException{
         dataSource = new MysqlDataSource();
         dataSource.setPort(3306); // could also be 3306
@@ -30,34 +38,29 @@ public class SQLServer {
 
         System.out.println("Connecting...");
         conn = (Connection) dataSource.getConnection();
-        System.out.println("Connected");
+        System.out.println("Connected\n");
     }
 
-    public String simpleRead() throws SQLException {
+    /**
+     * perform a search query on the server
+     * @return list of the tuples from query
+     * @throws SQLException
+     */
+    public ArrayList<TupleResult> simpleRead() throws SQLException {
 
-        System.out.println( "Building Unique Set . . .\n" );
+        System.out.println( "Building Unique Set . . ." );
         stmt = (Statement) conn.createStatement();
+        result = stmt.executeQuery( "SELECT * FROM production LIMIT 50;" );
 
-        // Get info from IMDB_ORG.Title_Basics
-        result = stmt.executeQuery( "SELECT * FROM job;" );
-
-//        set = new TempSet();
-        ArrayList<String> list = new ArrayList<>();
-
-        // Add to TempSet ArrayList to get unique values
+        ArrayList<TupleResult> list = new ArrayList<>();
         while ( result.next() ) {
-            String genres = result.getString( "jobID" );
-            if ( genres != null && genres.length() > 0 ) {
-                String[] array = genres.split( ",|\\n" );
-                if ( array.length > 0 ) {
-                    for ( String item : array ) {
-                        list.add( item );
-                    }
-                }
-            }
+            String ID = result.getString( "prodID" );
+            String description = result.getString( "primaryTitle");
+            TupleResult result = new TupleResult(description, "Movie", ID);
+            list.add(result);
         }
 
-        System.out.println("Built "+list.size()+" items");
-        return list.toString().replaceAll(",","\n");
+        System.out.println("Built "+list.size()+" items\n");
+        return list;
     }
 }
