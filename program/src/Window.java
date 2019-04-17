@@ -1,4 +1,6 @@
 import javax.swing.*;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -28,7 +30,8 @@ public class Window extends JFrame {
      */
     Window(){
         server = new SQLServer();
-        try { server.connectTo("71.63.48.66");
+        try {
+            server.connectTo("71.63.48.66", 3306, "imdb", "program", "Yeehaw420$");
         } catch (SQLException ignored) {}
 
         topPanel = new JPanel();
@@ -39,6 +42,7 @@ public class Window extends JFrame {
 
         listModel = new DefaultListModel();
         searchList = new JList(listModel);
+        searchList.addListSelectionListener(searchResultListener());
         listScroll = new JScrollPane(searchList);
 
         topPanel.add(searchField);
@@ -74,5 +78,14 @@ public class Window extends JFrame {
         for (TupleResult i : list){
             listModel.addElement(i);
         }
+    }
+
+    private ListSelectionListener searchResultListener(){
+        return new ListSelectionListener() {
+            @Override
+            public void valueChanged(ListSelectionEvent e) {
+                System.out.println("Clicked "+ listModel.get(e.getFirstIndex()) );
+            }
+        };
     }
 }

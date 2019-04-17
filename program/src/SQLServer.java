@@ -16,6 +16,7 @@ public class SQLServer {
     private Statement stmt;
     private ResultSet result;
 
+
     /**
      * no args constructor
      */
@@ -27,13 +28,13 @@ public class SQLServer {
      * @param address
      * @throws SQLException
      */
-    public void connectTo(String address) throws SQLException{
+    public void connectTo(String address, int port, String database, String user, String pass) throws SQLException{
         dataSource = new MysqlDataSource();
-        dataSource.setPort(3306); // could also be 3306
+        dataSource.setPort(port); // could also be 3306
         dataSource.setUseSSL(false);
-        dataSource.setDatabaseName("imdb");
-        dataSource.setUser("program");
-        dataSource.setPassword("Yeehaw420$");
+        dataSource.setDatabaseName(database);
+        dataSource.setUser(user);
+        dataSource.setPassword(pass);
         dataSource.setServerName(address); // "mysql.cs.jmu.edu" or "71.63.48.66" or "10.0.0.154"
 
         System.out.println("Connecting...");
