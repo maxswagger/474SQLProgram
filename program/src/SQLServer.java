@@ -46,11 +46,11 @@ public class SQLServer {
      * @return list of the tuples from query
      * @throws SQLException
      */
-    public ArrayList<TupleResult> simpleRead() throws SQLException {
+    public ArrayList<TupleResult> simpleRead(String query) throws SQLException {
 
         System.out.println( "Building Unique Set . . ." );
         stmt = (Statement) conn.createStatement();
-        result = stmt.executeQuery( "SELECT * FROM production LIMIT 50;" );
+        result = stmt.executeQuery( "SELECT * FROM production WHERE primaryTitle LIKE '%"+query+"%' LIMIT 50;" );
 
         ArrayList<TupleResult> list = new ArrayList<>();
         while ( result.next() ) {

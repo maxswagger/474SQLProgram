@@ -58,7 +58,7 @@ public class Window extends JFrame {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
                 try {
-                    ArrayList<TupleResult> resultList = server.simpleRead();
+                    ArrayList<TupleResult> resultList = server.simpleRead(searchField.getText());
                     populateList(resultList);
                 } catch (SQLException e) {System.out.println("Failed to read");}
             }

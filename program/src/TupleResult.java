@@ -24,6 +24,6 @@ public class TupleResult {
      * @return
      */
     public String toString(){
-        return "["+type+"] "+name;
+        return "["+type+"] "+" ID: "+id+"  "+name;
     }
 }
