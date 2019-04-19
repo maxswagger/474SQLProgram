@@ -5,6 +5,9 @@ import Backend.ProductionResult;
 import Backend.TupleResult;
 
 import javax.swing.*;
+import javax.swing.border.Border;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -22,6 +25,8 @@ public class DetailPane extends JPanel {
     JScrollPane castScrollPane;
 
     JTabbedPane extrasPane;
+    JList<PersonResult> list;
+    JList<ProductionResult> prodList;
 
     /**
      * Create a new panel.
@@ -113,9 +118,13 @@ public class DetailPane extends JPanel {
             //Finally add it to the main frame.
             this.add(headerPanel, BorderLayout.NORTH);
 
+
+
+
             //Create a cast and crew panel
              DefaultListModel<PersonResult> listModel = new DefaultListModel();
-             JList<PersonResult> list = new JList(listModel);
+             list = new JList(listModel);
+             list.addListSelectionListener(new PersonListener());
              castScrollPane = new JScrollPane(list);
              result.addCastCrew();
 
@@ -124,6 +133,48 @@ public class DetailPane extends JPanel {
              }
 
              this.add(castScrollPane, BorderLayout.EAST);
+
+
+
+             //Create a main section
+    }
+
+    /**
+     * Create a pane for a specific person that shows relevant person info and relevant productions
+     * @param result
+     */
+    public void createPersonPane(PersonResult result) {
+        headerPanel = new JPanel();
+        headerPanel.setLayout(new BorderLayout());
+
+
+        JLabel nameLabel = new JLabel(result.getName());
+        headerPanel.add(nameLabel);
+
+
+        String livedString = "Born: " + result.getBirthYear() + " - Death: " + result.getDeathYear();
+        JLabel livedYears = new JLabel(livedString);
+
+        headerPanel.add(livedYears);
+
+        JButton backButton = new JButton("Back");
+        backButton.addActionListener(new ButtonListener());
+        headerPanel.add(backButton, BorderLayout.WEST);
+
+        //Create a known for productions panel
+        DefaultListModel<ProductionResult> listModel = new DefaultListModel();
+        prodList = new JList(listModel);
+        prodList.addListSelectionListener(new ProductionListener());
+        castScrollPane = new JScrollPane(prodList);
+        result.getKnownProductions();
+
+        for(ProductionResult person : result.getProductions()) {
+            listModel.addElement(person);
+        }
+
+        this.add(headerPanel, BorderLayout.NORTH);
+        this.add(castScrollPane, BorderLayout.CENTER);
+
 
     }
 
@@ -136,7 +187,40 @@ public class DetailPane extends JPanel {
         @Override
         public void actionPerformed(ActionEvent e) {
             if(e.getActionCommand().equals("Back")) {
-                windowFrame.mainScreen();
+                //windowFrame.mainScreen();
+                windowFrame.goBack();
+            }
+        }
+    }
+
+    /**
+     * Generate a person pane when clicking a person
+     */
+    private class PersonListener implements ListSelectionListener {
+
+        @Override
+        public void valueChanged(ListSelectionEvent e) {
+            if(!list.isSelectionEmpty() && !list.getValueIsAdjusting()) {
+                PersonResult result = list.getSelectedValue();
+                DetailPane newPersonPane = new DetailPane(windowFrame);
+                newPersonPane.createPersonPane(result);
+                windowFrame.pushScreen(newPersonPane);
+            }
+        }
+    }
+
+    /**
+     * Generate a production pane when clicking a production
+     */
+    private class ProductionListener implements ListSelectionListener {
+
+        @Override
+        public void valueChanged(ListSelectionEvent e) {
+            if(!prodList.isSelectionEmpty() && !prodList.getValueIsAdjusting()) {
+                ProductionResult result = prodList.getSelectedValue();
+                DetailPane newProductionPane = new DetailPane(windowFrame);
+                newProductionPane.buildEntertainmentPanel(result);
+                windowFrame.pushScreen(newProductionPane);
             }
         }
     }

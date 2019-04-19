@@ -34,6 +34,9 @@ public class ProductionResult extends TupleResult {
         castCrew = new ArrayList<>();
     }
 
+    /**
+     * Get genre of the production
+     */
     public void addGenre() {
         ResultSet result = null;
         try {
@@ -59,7 +62,9 @@ public class ProductionResult extends TupleResult {
                 String jobID = result.getString("jobID");
                 String characterPlayed = result.getString("characterPlayed");
                 String jobTitle = result.getString("jobTitle");
-                PersonResult newResult = new PersonResult(id, "Person", name, jobTitle, characterPlayed, jobID, server);
+                int birthYear = result.getInt("birthYear");
+                int deathYear = result.getInt("deathYear");
+                PersonResult newResult = new PersonResult(id, "Person", name, jobTitle, characterPlayed, jobID, birthYear, deathYear, server);
                 castCrew.add(newResult);
             }
         } catch (SQLException e) {

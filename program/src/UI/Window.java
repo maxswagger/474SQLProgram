@@ -12,6 +12,7 @@ import java.sql.SQLException;
 import Backend.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Stack;
 
 /**
  * UI.Window class which contains the main window and starting page
@@ -26,11 +27,13 @@ public class Window extends JFrame {
     private JTextField searchField;
     private JButton settingsButton;
     private JPanel mainPanel;
+    private JPanel currentPanel;
 
     private DefaultListModel<ProductionResult> listModel;
     private JList<ProductionResult> searchList;
     private JScrollPane listScroll;
-
+    private searchListListener listener;
+    private Stack<JPanel> screenStack;
     private DetailPane dPane;
 
     /**
@@ -52,17 +55,21 @@ public class Window extends JFrame {
 
         listModel = new DefaultListModel<ProductionResult>();
         searchList = new JList<ProductionResult>(listModel);
-        searchList.addListSelectionListener(new searchListListener());
+        listener = new searchListListener();
+        searchList.addListSelectionListener(listener);
         listScroll = new JScrollPane(searchList);
 
         topPanel.add(searchField);
         topPanel.add(searchButton);
         topPanel.add(settingsButton);
 
+        currentPanel = mainPanel;
         mainPanel.add(topPanel, BorderLayout.NORTH);
         mainPanel.add(listScroll, BorderLayout.CENTER);
         mainPanel.setVisible(true);
         add(mainPanel);
+        screenStack = new Stack<>();
+        screenStack.push(mainPanel);
     }
 
     /**
@@ -99,9 +106,14 @@ public class Window extends JFrame {
      */
     private void refreshSearch() {
 
-        searchList.addListSelectionListener(new searchListListener());
-        searchList.removeAll();
+        //searchList.removeAll();
+        searchList.removeListSelectionListener(listener);
         searchList.clearSelection();
+        listModel.clear();
+        listModel = new DefaultListModel<ProductionResult>();
+        searchList.removeAll();
+        searchList.setModel(listModel);
+        searchList.addListSelectionListener(listener);
     }
 
     /**
@@ -119,10 +131,39 @@ public class Window extends JFrame {
      */
     private void goToDetailPage(ProductionResult result) {
         dPane = new DetailPane(this);
+        currentPanel = dPane;
         mainPanel.setVisible(false);
         dPane.buildEntertainmentPanel(result);
         dPane.setVisible(true);
         add(dPane, BorderLayout.CENTER);
+        screenStack.push(dPane);
+    }
+
+    /**
+     *  Push a new screen onto the stack and set it as the current screen.
+     * @param screen - The screen to add to the stack.
+     */
+    public void pushScreen(JPanel screen) {
+        currentPanel.setVisible(false);
+        currentPanel = screen;
+        screenStack.push(screen);
+        screen.setVisible(true);
+        add(screen);
+    }
+
+    /**
+     * Allows the JFrame to return to a previous screen.
+     * Used for back buttons.
+     */
+    public void goBack() {
+        System.out.println(screenStack);
+        JPanel curPanel = screenStack.pop();
+        JPanel prevPanel = screenStack.pop();
+        curPanel.setVisible(false);
+        currentPanel = prevPanel;
+        screenStack.push(prevPanel);
+        prevPanel.setVisible(true);
+        add(prevPanel);
     }
 /*
     private ListSelectionListener searchResultListener(){
@@ -144,8 +185,9 @@ public class Window extends JFrame {
     {
         @Override
         public void valueChanged(ListSelectionEvent e) {
-            System.out.println("Clicked "+ listModel.get(e.getFirstIndex()) );
+
             if(!searchList.isSelectionEmpty() && !searchList.getValueIsAdjusting()) {
+                System.out.println("Clicked "+ listModel.get(e.getFirstIndex()) );
                 TupleResult selectedResult = (TupleResult) searchList.getSelectedValue();
 
                 if(selectedResult.getType().equals("Movie")) {
