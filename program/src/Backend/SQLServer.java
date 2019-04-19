@@ -91,7 +91,7 @@ public class SQLServer {
             int endYear = result.getInt("endYear");
             int runTime = result.getInt("runTime");
             ProductionResult result = new ProductionResult(ID, type, description, originalTitle,
-                    isAdult, startYear, endYear, runTime);
+                    isAdult, startYear, endYear, runTime, this);
             list.add(result);
         }
 
@@ -99,11 +99,14 @@ public class SQLServer {
         return list;
     }
 
-    public String executeStatement(String executableStatement, String[] columns, String information) throws SQLException {
+    /**
+     * Used by outside classes to execute custom Queries
+     * @param executableStatement
+     * @return
+     * @throws SQLException
+     */
+    public ResultSet executeStatement(String executableStatement) throws SQLException {
         stmt = (Statement) conn.createStatement();
-
-        result = stmt.executeQuery(executableStatement);
-
-        return "";
+        return stmt.executeQuery(executableStatement);
     }
 }

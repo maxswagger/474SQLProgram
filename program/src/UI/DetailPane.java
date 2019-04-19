@@ -1,5 +1,6 @@
 package UI;
 
+import Backend.PersonResult;
 import Backend.ProductionResult;
 import Backend.TupleResult;
 
@@ -7,6 +8,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.ResultSet;
 
 /**
  * Main class for building and displaying a rich content pane for search results
@@ -17,6 +19,7 @@ public class DetailPane extends JPanel {
 
     JPanel headerPanel;
     JPanel detailPanel;
+    JScrollPane castScrollPane;
 
     JTabbedPane extrasPane;
 
@@ -43,6 +46,7 @@ public class DetailPane extends JPanel {
             GridBagConstraints gridConstraints;
 
             JLabel runTime;
+            JLabel genreLabel;
 
             //Build various labels
             if(result.getName() != null)
@@ -55,6 +59,7 @@ public class DetailPane extends JPanel {
 
 
             runTime = new JLabel("Run time: " + result.getRunTime());
+            genreLabel = new JLabel("Genre: " + result.getGenre());
 
 
             String aRating = "";
@@ -73,11 +78,11 @@ public class DetailPane extends JPanel {
 
             //Build the layout of the content page
             gridConstraints = new GridBagConstraints();
-            gridConstraints.insets = new Insets(2, 2, 2, 5);
+            gridConstraints.insets = new Insets(1, 1, 2, 2);
 
             gridConstraints.gridx = 0;
             gridConstraints.gridy = 0;
-            gridConstraints.gridwidth = 2;
+            gridConstraints.gridwidth = 1;
             headerPanel.add(backButton, gridConstraints);
 
             gridConstraints.gridx = 5;
@@ -100,8 +105,26 @@ public class DetailPane extends JPanel {
             gridConstraints.gridwidth = 3;
             headerPanel.add(runTime, gridConstraints);
 
+            gridConstraints.gridx = 12;
+            gridConstraints.gridy = 1;
+            gridConstraints.gridwidth = 3;
+            headerPanel.add(genreLabel, gridConstraints);
+
             //Finally add it to the main frame.
             this.add(headerPanel, BorderLayout.NORTH);
+
+            //Create a cast and crew panel
+             DefaultListModel<PersonResult> listModel = new DefaultListModel();
+             JList<PersonResult> list = new JList(listModel);
+             castScrollPane = new JScrollPane(list);
+             result.addCastCrew();
+
+             for(PersonResult person : result.getCastCrew()) {
+                 listModel.addElement(person);
+             }
+
+             this.add(castScrollPane, BorderLayout.EAST);
+
     }
 
     /**
