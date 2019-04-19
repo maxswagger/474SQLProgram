@@ -1,10 +1,10 @@
 # CS 474 SQL Project
 Authors: Max Samoylov, Phillip Zubov, Tyree Mitchell, Buddy Godfrey
 
-##About
+## About
 This project is a front-end application for an "IMDB clone" database for JMU's CS 474 Databases class.
 
-##To-Do
+## To-Do
 
 - [x] Generic SQL queries
 - [x] Return search results
