@@ -1,11 +1,18 @@
+package Backend;
+
 /**
  * a search result (tuple) from a query
  */
-public class TupleResult {
+public abstract class TupleResult {
 
     private String name;
     private String type;
     private String id;
+
+
+    TupleResult() {
+
+    }
 
     /**
      * consructor to store information
@@ -17,6 +24,18 @@ public class TupleResult {
         this.name = name;
         this.type = type;
         this.id = id;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getId() {
+        return id;
     }
 
     /**
