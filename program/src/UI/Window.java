@@ -29,8 +29,8 @@ public class Window extends JFrame {
     private JPanel mainPanel;
     private JPanel currentPanel;
 
-    private DefaultListModel<ProductionResult> listModel;
-    private JList<ProductionResult> searchList;
+    private DefaultListModel<TupleResult> listModel;
+    private JList<TupleResult> searchList;
     private JScrollPane listScroll;
     private searchListListener listener;
     private Stack<JPanel> screenStack;
@@ -53,8 +53,8 @@ public class Window extends JFrame {
         searchField = new JTextField(35);
         settingsButton = new JButton("Settings");
 
-        listModel = new DefaultListModel<ProductionResult>();
-        searchList = new JList<ProductionResult>(listModel);
+        listModel = new DefaultListModel<TupleResult>();
+        searchList = new JList<TupleResult>(listModel);
         listener = new searchListListener();
         searchList.addListSelectionListener(listener);
         listScroll = new JScrollPane(searchList);
@@ -83,8 +83,10 @@ public class Window extends JFrame {
                 try {
                     refreshSearch();
                     ArrayList<ProductionResult> resultList = server.productionRead(searchField.getText());
+                    ArrayList<PersonResult> personList = server.personRead(searchField.getText());
                     //ArrayList<TupleResult> resultList = server.simpleRead(searchField.getText());
                     populateList(resultList);
+                    populatePersonList(personList);
                 } catch (SQLException e) {System.out.println("Failed to read");}
             }
         };
@@ -95,8 +97,17 @@ public class Window extends JFrame {
      * @param list
      */
     private void populateList(List<ProductionResult> list){
-        listModel.clear();
         for (ProductionResult i : list){
+            listModel.addElement(i);
+        }
+    }
+
+    /**
+     * function to populate the results into the list
+     * @param list
+     */
+    private void populatePersonList(List<PersonResult> list){
+        for (PersonResult i : list){
             listModel.addElement(i);
         }
     }
@@ -110,7 +121,7 @@ public class Window extends JFrame {
         searchList.removeListSelectionListener(listener);
         searchList.clearSelection();
         listModel.clear();
-        listModel = new DefaultListModel<ProductionResult>();
+        listModel = new DefaultListModel<TupleResult>();
         searchList.removeAll();
         searchList.setModel(listModel);
         searchList.addListSelectionListener(listener);
@@ -123,20 +134,6 @@ public class Window extends JFrame {
         dPane.setVisible(false);
         mainPanel.setVisible(true);
         add(mainPanel);
-    }
-
-    /**
-     * Show the content page for that specific result
-     * @param result
-     */
-    private void goToDetailPage(ProductionResult result) {
-        dPane = new DetailPane(this);
-        currentPanel = dPane;
-        mainPanel.setVisible(false);
-        dPane.buildEntertainmentPanel(result);
-        dPane.setVisible(true);
-        add(dPane, BorderLayout.CENTER);
-        screenStack.push(dPane);
     }
 
     /**
@@ -156,7 +153,6 @@ public class Window extends JFrame {
      * Used for back buttons.
      */
     public void goBack() {
-        System.out.println(screenStack);
         JPanel curPanel = screenStack.pop();
         JPanel prevPanel = screenStack.pop();
         curPanel.setVisible(false);
@@ -165,18 +161,10 @@ public class Window extends JFrame {
         prevPanel.setVisible(true);
         add(prevPanel);
     }
-/*
-    private ListSelectionListener searchResultListener(){
-        return new ListSelectionListener() {
-            @Override
-            public void valueChanged(ListSelectionEvent e) {
-                System.out.println("Clicked "+ listModel.get(e.getFirstIndex()) );
-                if(!searchList.isSelectionEmpty() && !searchList.getValueIsAdjusting()) {
-                    TupleResult selectedResult = searchList.getSelectedValue();
-                }
-            }
-        };
-    } */
+
+    private Window getFrame() {
+        return this;
+    }
 
     /**
      * Modified list listener to help with debounce
@@ -192,8 +180,18 @@ public class Window extends JFrame {
 
                 if(selectedResult.getType().equals("Movie")) {
                     ProductionResult netResult = (ProductionResult) selectedResult;
-                    goToDetailPage(netResult);
+                    dPane = new ProductionPane(getFrame(), (ProductionResult) netResult);
+                } else if(selectedResult.getType().equals("Person")) {
+                    PersonResult netResult = (PersonResult) selectedResult;
+                    dPane = new PersonPane(getFrame(), (PersonResult) netResult);
                 }
+
+                currentPanel = dPane;
+                mainPanel.setVisible(false);
+                dPane.setVisible(true);
+                add(dPane, BorderLayout.CENTER);
+                screenStack.push(dPane);
+
             }
         }
     }

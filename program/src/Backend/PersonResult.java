@@ -93,10 +93,15 @@ public class PersonResult extends TupleResult{
 
     @Override
     public String toString(){
-        String returnString = getName() + ": " + jobID;
+        String returnString = getName();
+        if(jobID != null) {
+            returnString += ": " + jobID;
+        }
+
         if (jobTitle != null){
             return returnString + " " + jobTitle;
         }
+
         if(characterPlayed != null) {
             return returnString + " " + characterPlayed;
         }

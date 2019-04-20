@@ -4,6 +4,7 @@ import com.mysql.jdbc.Connection;
 import com.mysql.jdbc.Statement;
 import com.mysql.jdbc.jdbc2.optional.MysqlDataSource;
 
+import javax.swing.plaf.nimbus.State;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -96,6 +97,24 @@ public class SQLServer {
         }
 
         System.out.println("Built "+list.size()+" items\n");
+        return list;
+    }
+
+    public ArrayList<PersonResult> personRead(String query) throws SQLException {
+        stmt = (Statement) conn.createStatement();
+        result = stmt.executeQuery("SELECT * FROM Person WHERE primaryName LIKE '%"+query+"%' LIMIT 50;" );
+
+        ArrayList<PersonResult> list = new ArrayList<>();
+        while(result.next()) {
+            String name = result.getString("primaryName");
+            String id = result.getString("personID");
+            int birthYear = result.getInt("birthYear");
+            int deathYear = result.getInt("deathYear");
+            PersonResult newResult = new PersonResult(id, "Person", name, null,
+                    null, null, birthYear, deathYear, this);
+            list.add(newResult);
+        }
+
         return list;
     }
 
