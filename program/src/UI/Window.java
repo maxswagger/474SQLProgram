@@ -42,7 +42,7 @@ public class Window extends JFrame {
     public Window(){
         server = new SQLServer();
         try {
-            server.connectTo("localhost", 3306, "imdb", "root", "");
+            server.connectTo("71.63.48.66", 3306, "imdb", "program", "Yeehaw420$");
         } catch (SQLException ignored) {}
         mainPanel = new JPanel();
         mainPanel.setLayout(new BorderLayout());
