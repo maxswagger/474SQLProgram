@@ -1,8 +1,10 @@
 package Backend;
 
+import java.sql.Array;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashSet;
 
 public class PersonResult extends TupleResult{
     private SQLServer server;
@@ -12,6 +14,10 @@ public class PersonResult extends TupleResult{
     private int birthYear;
     private int deathYear;
     private ArrayList<ProductionResult> knownProductions;
+    private ArrayList<String> productionIDS;
+
+    private HashSet<String> jobIDs;
+    private HashSet<String> characters;
 
     public PersonResult(String id, String type, String name, String jobTitle
                         , String characterPlayed, String jobID, int birthYear, int deathYear, SQLServer server) {
@@ -22,6 +28,9 @@ public class PersonResult extends TupleResult{
         this.jobID = jobID;
         this.birthYear = birthYear;
         this.deathYear = deathYear;
+        productionIDS = new ArrayList<>();
+        jobIDs = new HashSet<>();
+        characters = new HashSet<>();
     }
 
     /**
@@ -34,9 +43,15 @@ public class PersonResult extends TupleResult{
             knownProductions = new ArrayList<>();
             result = server.executeStatement("SELECT * FROM person INNER JOIN castandcrew " +
                     "ON person.personID = castandcrew.personID WHERE person.personID = " + "'" + getId() + "'" + ";");
-            ArrayList<String> productionIDS = new ArrayList<>();
             while(result.next()) {
                 productionIDS.add(result.getString("prodID"));
+                String job = result.getString("jobID");
+                if(job != null)
+                    jobIDs.add(job);
+
+                String character = result.getString("characterPlayed");
+                if(character != null)
+                    characters.add(character);
             }
 
 
@@ -71,6 +86,10 @@ public class PersonResult extends TupleResult{
         return knownProductions;
     }
 
+    public HashSet<String> getJobIDs() {
+        return jobIDs;
+    }
+
     public String getJobTitle() {
         return jobTitle;
     }
@@ -89,6 +108,24 @@ public class PersonResult extends TupleResult{
 
     public int getDeathYear() {
         return deathYear;
+    }
+
+    public String jobsString() {
+        String returnString = "";
+        for(String job : jobIDs) {
+            returnString += "•" + job + "\n";
+        }
+
+        return returnString;
+    }
+
+    public String charactersString() {
+        String returnString = "";
+        for(String potrayal : characters) {
+            returnString += "•" + potrayal + "\n";
+        }
+
+        return returnString;
     }
 
     @Override
