@@ -8,6 +8,8 @@ import javax.xml.soap.Detail;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
 import java.sql.SQLException;
 import Backend.*;
 import java.util.ArrayList;
@@ -52,6 +54,7 @@ public class Window extends JFrame {
         searchButton.addActionListener(searchFunction());
         searchField = new JTextField(35);
         settingsButton = new JButton("Settings");
+        settingsButton.addActionListener(settingsMenu());
 
         listModel = new DefaultListModel<TupleResult>();
         searchList = new JList<TupleResult>(listModel);
@@ -194,5 +197,49 @@ public class Window extends JFrame {
 
             }
         }
+    }
+
+    /**
+     * action listener for the settings button
+     * @return
+     */
+    private ActionListener settingsMenu() {
+        return new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                disableMainWindow(true);
+                SettingsFrame settingsFrame = new SettingsFrame(server);
+
+                settingsFrame.addWindowListener(new WindowListener() {
+                    @Override
+                    public void windowOpened(WindowEvent e) {}
+                    @Override
+                    public void windowClosing(WindowEvent e) {
+                        disableMainWindow(false);
+                    }
+                    @Override
+                    public void windowClosed(WindowEvent e) {}
+                    @Override
+                    public void windowIconified(WindowEvent e) {}
+                    @Override
+                    public void windowDeiconified(WindowEvent e) {}
+                    @Override
+                    public void windowActivated(WindowEvent e) {}
+                    @Override
+                    public void windowDeactivated(WindowEvent e) {}
+                });
+            }
+        };
+    }
+
+    /**
+     * helper method for settings button, disables user from using the main window
+     * @param x is a boolean that when false sets the main window to be enabled and vice versa
+     */
+    public void disableMainWindow(boolean x){
+        if(x)
+            this.setEnabled(false);
+        else
+            this.setEnabled(true);
     }
 }
