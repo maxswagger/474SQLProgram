@@ -63,7 +63,7 @@ public class PersonPane extends DetailPane {
         gridConstraints.fill = GridBagConstraints.HORIZONTAL;
         gridConstraints.gridx = 0;
         gridConstraints.gridy = 1;
-        JLabel nameLabel = new JLabel(result.getName());
+        JLabel nameLabel = new JLabel("<html><b><u>" + result.getName() + "</u></b></html>");
         infoPanel.add(nameLabel, gridConstraints);
 
 

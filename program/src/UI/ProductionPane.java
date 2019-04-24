@@ -21,11 +21,13 @@ public class ProductionPane extends DetailPane {
         //Construct entire pane
         constructUI();
         buildCastAndCrewPanel();
+        buildTabs();
     }
 
     private void constructUI() {
+
+
         JLabel titleLabel = new JLabel();
-        JLabel ratingsLabel;
 
         JLabel adultRating;
         JLabel startEndYears;
@@ -36,16 +38,16 @@ public class ProductionPane extends DetailPane {
 
         //Build various labels
         if(result.getName() != null)
-            titleLabel.setText(result.getName());
+            titleLabel.setText("<html><b><u>" + result.getName() + "</u></b></html>");
 
 
-        String yearString = "Years running: ";
+        String yearString = "||Years running: ";
         yearString += result.getStartYear() + " - " + result.getEndYear();
         startEndYears = new JLabel(yearString);
 
 
-        runTime = new JLabel("Run time: " + result.getRunTime());
-        genreLabel = new JLabel("Genre: " + result.getGenre());
+        runTime = new JLabel("||Run time: " + result.getRunTime());
+        genreLabel = new JLabel("||Genre: " + result.getGenre());
 
 
         String aRating = "";
@@ -57,45 +59,67 @@ public class ProductionPane extends DetailPane {
         adultRating = new JLabel(aRating);
 
         headerPanel = new JPanel();
-        headerPanel.setLayout(new GridBagLayout());
+        headerPanel.setLayout(new BorderLayout());
+
+
+
+        JPanel titlePanel = new JPanel();
+        titlePanel.setLayout(new GridBagLayout());
+
+        result.loadRatings();
+        JLabel ratingLabel = new JLabel();
+        if(result.getAverageRating() > 0) {
+            ratingLabel.setText("|| Rating: " + result.getAverageRating() + "/10 " +
+                    "Number of Votes: " + result.getNumberVotes());
+        }
+
 
         JButton backButton = new JButton("Back");
         backButton.addActionListener(new ButtonListener());
+        headerPanel.add(backButton, BorderLayout.WEST);
 
         //Build the layout of the content page
         gridConstraints = new GridBagConstraints();
         gridConstraints.insets = new Insets(1, 1, 2, 2);
 
-        gridConstraints.gridx = 0;
-        gridConstraints.gridy = 0;
-        gridConstraints.gridwidth = 1;
-        headerPanel.add(backButton, gridConstraints);
-
         gridConstraints.gridx = 5;
         gridConstraints.gridy = 0;
         gridConstraints.gridwidth = 6;
-        headerPanel.add(titleLabel, gridConstraints);
+        titlePanel.add(titleLabel, gridConstraints);
 
         gridConstraints.gridx = 0;
         gridConstraints.gridy = 1;
         gridConstraints.gridwidth = 2;
-        headerPanel.add(adultRating, gridConstraints);
+        titlePanel.add(adultRating, gridConstraints);
 
         gridConstraints.gridx = 3;
         gridConstraints.gridy = 1;
         gridConstraints.gridwidth = 3;
-        headerPanel.add(startEndYears, gridConstraints);
+        titlePanel.add(startEndYears, gridConstraints);
 
         gridConstraints.gridx = 7;
         gridConstraints.gridy = 1;
         gridConstraints.gridwidth = 3;
-        headerPanel.add(runTime, gridConstraints);
+        titlePanel.add(runTime, gridConstraints);
 
-        gridConstraints.gridx = 12;
+        gridConstraints.gridx = 10;
         gridConstraints.gridy = 1;
         gridConstraints.gridwidth = 3;
-        headerPanel.add(genreLabel, gridConstraints);
+        titlePanel.add(genreLabel, gridConstraints);
 
+        gridConstraints.gridx = 5;
+        gridConstraints.gridy = 2;
+        gridConstraints.gridwidth = 3;
+        titlePanel.add(ratingLabel, gridConstraints);
+
+        headerPanel.add(titlePanel, BorderLayout.CENTER);
+
+        //Create a description box
+        JTextArea descriptionText = new JTextArea();
+        descriptionText.setOpaque(false);
+        descriptionText.setText("What a great movie");
+        descriptionText.setEditable(false);
+        this.add(descriptionText, BorderLayout.CENTER);
         //Finally add it to the main frame.
         this.add(headerPanel, BorderLayout.NORTH);
     }
@@ -113,6 +137,36 @@ public class ProductionPane extends DetailPane {
         }
 
         this.add(scrollPane, BorderLayout.EAST);
+    }
+
+    /**
+     * Build the tabbed area which shows jobs and characters this person is associated with
+     */
+    private void buildTabs() {
+        result.loadEpisodes();
+        result.loadVersions();
+        JTabbedPane tabPane = new JTabbedPane();
+
+        JTextArea versionText = new JTextArea();
+        versionText.setEditable(false);
+        versionText.setText(result.versionsString());
+        JScrollPane versionPanel = new JScrollPane(versionText);
+        versionPanel.setPreferredSize(new Dimension(800, 100));
+        versionPanel.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+
+        JTextArea seasonText = new JTextArea();
+        seasonText.setEditable(false);
+        seasonText.setText(result.episodesString());
+        JScrollPane epPanel = new JScrollPane(seasonText);
+        epPanel.setPreferredSize(new Dimension(800, 100));
+        epPanel.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+
+
+
+        tabPane.add("Versions", versionPanel);
+        tabPane.add("Season Information", epPanel);
+        this.add(tabPane, BorderLayout.SOUTH);
+
     }
 
     /**

@@ -1,5 +1,6 @@
 import UI.Window;
-
+import mdlaf.*;
+import mdlaf.animation.*;
 import java.sql.SQLException;
 import javax.swing.*;
 
@@ -13,7 +14,9 @@ public class Main {
      * Main method to just launch the program
      */
     public static void main( String[] args ) throws SQLException {
-        try { UIManager.setLookAndFeel("com.sun.java.swing.plaf.nimbus.NimbusLookAndFeel");
+        try {
+            UIManager.setLookAndFeel(new MaterialLookAndFeel());
+
         } catch(Exception ignored){}
 
         Window window = new Window();
