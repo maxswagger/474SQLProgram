@@ -53,6 +53,7 @@ public class Window extends JFrame {
         searchButton = new JButton("Search");
         searchButton.addActionListener(searchFunction());
         searchField = new JTextField(35);
+        searchField.addActionListener(searchFunction());
         settingsButton = new JButton("Settings");
         settingsButton.addActionListener(settingsMenu());
 

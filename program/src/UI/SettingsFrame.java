@@ -29,9 +29,8 @@ public class SettingsFrame extends JFrame{
         newConnectionServer = server;
         new JFrame("Settings");
         changeConnectionPanel = new JPanel();
-        GroupLayout layout = new GroupLayout(changeConnectionPanel);
-        layout.setAutoCreateGaps(true);
-        layout.setAutoCreateContainerGaps(true);
+        GridLayout layout = new GridLayout(6,2);
+        setLayout(layout);
         //changeConnectionPanel.setLayout();
         //GridBagConstraints gbc = new GridBagConstraints();
 
@@ -81,26 +80,37 @@ public class SettingsFrame extends JFrame{
         passPanel.add(passwordLabel);
         passPanel.add(password);
 
-        layout.setHorizontalGroup(layout.createSequentialGroup()
-                .addComponent(addressPanel)
-                .addComponent(namePanel)
-                .addComponent(userPanel)
-                .addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
-                        .addComponent(portPanel))
-                .addComponent(passPanel));
+        add(addressLabel);
+        add(address);
+        add(portLabel);
+        add(port);
+        add(nameLabel);
+        add(databaseName);
+        add(usernameLabel);
+        add(username);
+        add(passwordLabel);
+        add(password);
+        add(changeConnectionButton);
+//        layout.setHorizontalGroup(layout.createSequentialGroup()
+//                .addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING))
+//                .addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)));
+//
+//        layout.setVerticalGroup(layout.createSequentialGroup()
+//                .addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
+//                        .addComponent(addressLabel)
+//                        .addComponent(portLabel)
+//                        .addComponent(nameLabel)
+//                        .addComponent(usernameLabel)
+//                        .addComponent(passwordLabel))
+//                .addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+//                        .addComponent(address)
+//                        .addComponent(port)
+//                        .addComponent(databaseName)
+//                        .addComponent(username)
+//                        .addComponent(password))
+//        );
 
-        layout.setVerticalGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
-                        .addComponent(addressPanel)
-                        .addComponent(portPanel))
-                .addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
-                        .addComponent(namePanel))
-                .addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
-                        .addComponent(userPanel)
-                        .addComponent(passPanel))
-        );
-
-        changeConnectionPanel.setLayout(layout);
+        //changeConnectionPanel.setLayout(layout);
 //        gbc.fill = GridBagConstraints.BOTH;
 //        gbc.weightx = 0.5;
 //        gbc.gridwidth = 3;
@@ -122,7 +132,7 @@ public class SettingsFrame extends JFrame{
 //        gbc.gridy = 1;
         //changeConnectionPanel.add(changeConnectionButton,gbc);
 
-        add(changeConnectionPanel);
+        //add(changeConnectionPanel);
         //pack();
 
 

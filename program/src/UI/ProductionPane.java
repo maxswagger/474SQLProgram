@@ -135,6 +135,7 @@ public class ProductionPane extends DetailPane {
 
         list.addListSelectionListener(new PersonListener());
         scrollPane = new JScrollPane(list);
+        scrollPane.setPreferredSize(new Dimension(400, 800));
         result.addCastCrew();
 
         for(PersonResult person : result.getCastCrew()) {

@@ -97,7 +97,7 @@ public class PersonPane extends DetailPane {
         prodList.addListSelectionListener(new ProductionListener());
 
         scrollPane = new JScrollPane(prodList);
-        scrollPane.setPreferredSize(new Dimension(300, 800));
+        scrollPane.setPreferredSize(new Dimension(400, 800));
         scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
         result.getKnownProductions();
 
