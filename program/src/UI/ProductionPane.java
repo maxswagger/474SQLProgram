@@ -117,7 +117,12 @@ public class ProductionPane extends DetailPane {
         //Create a description box
         JTextArea descriptionText = new JTextArea();
         descriptionText.setOpaque(false);
-        descriptionText.setText("What a great movie");
+        if(result.getAverageRating() >= 7) {
+            descriptionText.setText("What a great production.");
+        } else {
+            descriptionText.setText("Mediocre at best.");
+        }
+
         descriptionText.setEditable(false);
         this.add(descriptionText, BorderLayout.CENTER);
         //Finally add it to the main frame.
