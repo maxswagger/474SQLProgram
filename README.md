@@ -13,6 +13,5 @@ For the last couple weeks of the semester for the final part of the project we w
 - [x] Generic SQL queries.
 - [x] Return search results.
 - [x] Display a content pane showing more details of a search result.
-- [ ] Develop a filter and allow for more advanced queries.
-- [ ] Flesh out the content pane more to show even more details such as images from the web, and associated content from other tables.
-- [ ] Create any possible extra pages for various other types of information aside from people and productions.
+- [x] Develop a filter and allow for more advanced queries.
+- [x] Flesh out the content pane more to show even more details such as images from the web, and associated content from other tables.
