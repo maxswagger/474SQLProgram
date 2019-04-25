@@ -20,13 +20,7 @@ import java.util.Stack;
  * UI.Window class which contains the main window and starting page
  * to search database and see results
  * 4/19/2019
- * @author Tyree Mitchell, Max Samoylov
- *
- *
- * Added functionality to settings button, as well as implemented some things for adult filter.
- * 4/24/2019
- * @author Phillip Zubov
- *
+ * @author Maksim Samoylov, Tyree Mitchell, Phillip Zubov
  */
 public class Window extends JFrame {
 

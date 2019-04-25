@@ -1,13 +1,13 @@
 import Backend.SQLServer;
 import UI.Window;
 import mdlaf.*;
-import mdlaf.animation.*;
 import java.sql.SQLException;
 import javax.swing.*;
 
 /**
  * 474 SQL Server interacting program
- * By Maksim Samoylov, ... add your names lads
+ * By Maksim Samoylov, Tyree Mitchell, Phillip Zubov, Buddy Godfrey
+ * Group 44
  */
 public class Main {
 
@@ -17,7 +17,6 @@ public class Main {
     public static void main( String[] args ) throws SQLException {
         try {
             UIManager.setLookAndFeel(new MaterialLookAndFeel());
-
         } catch(Exception ignored){}
 
         SQLServer server = new SQLServer();

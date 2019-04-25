@@ -2,6 +2,7 @@ package Backend;
 
 /**
  * a search result (tuple) from a query
+ * @author Maksim Samoylov
  */
 public abstract class TupleResult {
 

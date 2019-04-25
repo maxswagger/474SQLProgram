@@ -13,7 +13,7 @@ import java.awt.event.ActionListener;
  * Settings menu code for program. Able to change server that user is connecting to as well as turn on nsfw filter on
  * and off.
  *  4/22/2019
- * @author Phillip Zubov, Max Samoylov
+ * @author Phillip Zubov, Maksim Samoylov
  *
  */
 public class SettingsFrame extends JFrame{
