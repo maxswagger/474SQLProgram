@@ -50,12 +50,9 @@ public class Window extends JFrame {
     /**
      * Set up content of the window
      */
-    public Window(){
-        server = new SQLServer();
+    public Window(SQLServer server){
+        this.server = server;
         settingsFrame = new SettingsFrame(server);
-        try {
-            server.connectTo("71.63.48.66", 3306, "imdb", "program", "Yeehaw420$");
-        } catch (SQLException ignored) {}
         mainPanel = new JPanel();
         mainPanel.setLayout(new BorderLayout());
 

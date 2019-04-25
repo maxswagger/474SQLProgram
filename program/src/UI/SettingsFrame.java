@@ -18,7 +18,7 @@ import java.awt.event.ActionListener;
  */
 public class SettingsFrame extends JFrame{
 
-    private JLabel addressLabel,portLabel,nameLabel,usernameLabel,passwordLabel;
+    private JLabel addressLabel,portLabel,nameLabel,usernameLabel,passwordLabel, connectedLabel;
     private JPanel changeConnectionPanel, addressPanel, portPanel, namePanel,userPanel, passPanel;
     private JTextField address,port,databaseName,username,password;
     private JCheckBox adultFilter;
@@ -34,7 +34,7 @@ public class SettingsFrame extends JFrame{
         newConnectionServer = server;
         new JFrame("Settings");
         changeConnectionPanel = new JPanel();
-        GridLayout layout = new GridLayout(7,1);
+        GridLayout layout = new GridLayout(8,1);
         setLayout(layout);
 
         addressLabel = new JLabel("Server address: ");
@@ -42,12 +42,14 @@ public class SettingsFrame extends JFrame{
         nameLabel = new JLabel("Database name: ");
         usernameLabel = new JLabel("Username: ");
         passwordLabel = new JLabel("Password: ");
+        connectedLabel = new JLabel("Connected?: "+server.getConnected());
+        connectedLabel.setHorizontalAlignment(SwingConstants.CENTER);
 
-        address = new JTextField();
-        port = new JTextField();
-        databaseName = new JTextField();
-        username = new JTextField();
-        password = new JTextField();
+        address = new JTextField(server.getAddress());
+        port = new JTextField(Integer.toString(server.getPort()));
+        databaseName = new JTextField(server.getDatabase());
+        username = new JTextField(server.getUser());
+        password = new JTextField(server.getPass());
 
 
         addressPanel = new JPanel();
@@ -94,6 +96,7 @@ public class SettingsFrame extends JFrame{
 
         changeConnectionPanel.setBorder(new EmptyBorder(0,10,0,10));
         add(changeConnectionButton);
+        add(connectedLabel);
         add(adultFilter);
 
         setSize(800,300);
@@ -115,8 +118,11 @@ public class SettingsFrame extends JFrame{
                  * encounters and create a dialog box that will warn the user that their input is invalid.
                  */
                 try {
-                    newConnectionServer.connectTo(address.getText(), Integer.parseInt(port.getText()),
-                            databaseName.getText(), username.getText(), password.getText());
+                    if( newConnectionServer.connectTo(address.getText(), Integer.parseInt(port.getText()),
+                            databaseName.getText(), username.getText(), password.getText())) {
+                        connectedLabel.setText("Connected?: True");
+
+                    }
 
                 } catch (Exception s) {
                     JDialog error = new JDialog(SettingsFrame.this, "Error!");

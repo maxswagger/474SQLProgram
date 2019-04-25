@@ -1,9 +1,11 @@
 package Backend;
 
+import com.mysql.jdbc.CommunicationsException;
 import com.mysql.jdbc.Connection;
 import com.mysql.jdbc.Statement;
 import com.mysql.jdbc.jdbc2.optional.MysqlDataSource;
 
+import java.net.ConnectException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -22,6 +24,13 @@ public class SQLServer {
     private ResultSet result;
     private boolean adultFilterBool = false;
 
+    String address = "71.63.48.66";
+    int port = 3306;
+    String database = "IMDB";
+    String user = "program";
+    String pass = "Yeehaw420$";
+
+    boolean connected = false;
 
     /**
      * no args constructor
@@ -34,7 +43,13 @@ public class SQLServer {
      * @param address
      * @throws SQLException
      */
-    public void connectTo(String address, int port, String database, String user, String pass) throws SQLException{
+    public boolean connectTo(String address, int port, String database, String user, String pass) throws SQLException{
+        this.address = address;
+        this.port = port;
+        this.database = database;
+        this.user = user;
+        this.pass = pass;
+
         dataSource = new MysqlDataSource();
         dataSource.setPort(port); // could also be 3306
         dataSource.setUseSSL(false);
@@ -44,8 +59,15 @@ public class SQLServer {
         dataSource.setServerName(address); // "mysql.cs.jmu.edu" or "71.63.48.66" or "10.0.0.154"
 
         System.out.println("Connecting...");
-        conn = (Connection) dataSource.getConnection();
+        try {
+            conn = (Connection) dataSource.getConnection();
+        }
+        catch (Exception com){
+            System.out.println("Could not connect");
+            return false;
+        }
         System.out.println("Connected\n");
+        return connected = true;
     }
 
     /**
@@ -80,6 +102,13 @@ public class SQLServer {
      */
     public ArrayList<ProductionResult> productionRead(String query) throws SQLException {
 
+        if (!connected) {
+            ArrayList<ProductionResult> list = new ArrayList<>();
+            list.add(new ProductionResult("", "error",
+                    "Error no connection, please check connection or try connecting to different IMDB server",
+                    "Error", 0,0,0,0,null));
+            return list;
+        }
         System.out.println( "Building Unique Set . . ." );
         stmt = (Statement) conn.createStatement();
         result = stmt.executeQuery( "SELECT * FROM production WHERE primaryTitle LIKE '%"+query+"%' LIMIT 50;" );
@@ -115,6 +144,10 @@ public class SQLServer {
      * @throws SQLException
      */
     public ArrayList<PersonResult> personRead(String query) throws SQLException {
+        if(!connected) {
+            return new ArrayList<>();
+        }
+
         stmt = (Statement) conn.createStatement();
         result = stmt.executeQuery("SELECT * FROM Person WHERE primaryName LIKE '%"+query+"%' LIMIT 50;" );
 
@@ -157,5 +190,29 @@ public class SQLServer {
      */
     public boolean getAdultFilterBool(){
         return adultFilterBool;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public int getPort() {
+        return port;
+    }
+
+    public String getDatabase() {
+        return database;
+    }
+
+    public String getUser() {
+        return user;
+    }
+
+    public String getPass() {
+        return pass;
+    }
+
+    public boolean getConnected() {
+        return connected;
     }
 }
