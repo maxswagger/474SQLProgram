@@ -6,6 +6,9 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashSet;
 
+/**
+ * @author Tyree Mitchell, Phillip Zubov
+ */
 public class PersonResult extends TupleResult{
     private SQLServer server;
     private String jobTitle;
@@ -13,6 +16,7 @@ public class PersonResult extends TupleResult{
     private String jobID;
     private int birthYear;
     private int deathYear;
+    private boolean adultFilter = false;
     private ArrayList<ProductionResult> knownProductions;
     private ArrayList<String> productionIDS;
 
@@ -69,7 +73,11 @@ public class PersonResult extends TupleResult{
                     int runTime = prodSet.getInt("runTime");
                     ProductionResult pResult = new ProductionResult(ID, type, description, originalTitle,
                             isAdult, startYear, endYear, runTime, server);
-                    knownProductions.add(pResult);
+                    if(!adultFilter)
+                        knownProductions.add(pResult);
+                    else if(adultFilter && isAdult == 0)
+                        knownProductions.add(pResult);
+                   // knownProductions.add(pResult);
                 }
             }
 
@@ -108,6 +116,14 @@ public class PersonResult extends TupleResult{
 
     public int getDeathYear() {
         return deathYear;
+    }
+
+    public void setAdultFilter(boolean x){
+        adultFilter = x;
+    }
+
+    public boolean getAdultFilter(){
+        return adultFilter;
     }
 
     public String jobsString() {

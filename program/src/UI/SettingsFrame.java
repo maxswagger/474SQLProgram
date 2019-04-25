@@ -1,5 +1,6 @@
 package UI;
 
+import Backend.PersonResult;
 import Backend.SQLServer;
 
 import javax.swing.*;
@@ -7,36 +8,35 @@ import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.Set;
 
 /**
- * Created by Phillip Zubov
- * 4/22/2019.
+ * Settings menu code for program. Able to change server that user is connecting to as well as turn on nsfw filter on
+ * and off.
+ *  4/22/2019
+ * @author Phillip Zubov, Max Samoylov
+ *
  */
 public class SettingsFrame extends JFrame{
 
-    //public JFrame settingsWindow;
-    private JLabel addressLabel,portLabel,nameLabel,usernameLabel,passwordLabel, turnAdultFilterOffLabel;
-    private JPanel panel,changeConnectionPanel, adultFilterPanel, addressPanel, portPanel, namePanel,userPanel, passPanel;
+    private JLabel addressLabel,portLabel,nameLabel,usernameLabel,passwordLabel;
+    private JPanel changeConnectionPanel, addressPanel, portPanel, namePanel,userPanel, passPanel;
     private JTextField address,port,databaseName,username,password;
-    private JCheckBoxMenuItem adultFilter;
+    private JCheckBox adultFilter;
     private JButton changeConnectionButton;
     private SQLServer newConnectionServer;
 
-    //private static Insets insets = new Insets(0, 0, 0, 0);
 
+    /**
+     * constructor for SettingsFrame.
+     * @param server used for setting up new connection(so as not to declare a whole new SQLServer object)
+     */
     public SettingsFrame(SQLServer server){
         newConnectionServer = server;
         new JFrame("Settings");
         changeConnectionPanel = new JPanel();
-        GridLayout layout = new GridLayout(6,2);
+        GridLayout layout = new GridLayout(7,1);
         setLayout(layout);
-        //changeConnectionPanel.setLayout();
-        //GridBagConstraints gbc = new GridBagConstraints();
 
-        //changeConnectionLabel = new JLabel("Type new connection parameters here(e.g. <server address> <server port> <database name> <username> <password>): ");
-        //changeConnectionLabel.setHorizontalAlignment(SwingConstants.CENTER);
-        turnAdultFilterOffLabel = new JLabel("Check this box if you are under the age of 18 or if you wish to not view NSFW content ");
         addressLabel = new JLabel("Server address: ");
         portLabel = new JLabel("Server port: ");
         nameLabel = new JLabel("Database name: ");
@@ -44,21 +44,19 @@ public class SettingsFrame extends JFrame{
         passwordLabel = new JLabel("Password: ");
 
         address = new JTextField();
-        address.setSize(new Dimension(100,24));
         port = new JTextField();
-        port.setSize(new Dimension(20, 24));
         databaseName = new JTextField();
-        databaseName.setSize(new Dimension(50, 24));
         username = new JTextField();
-        username.setSize(new Dimension(40, 24));
         password = new JTextField();
-        password.setSize(new Dimension(50, 24));
+
 
         addressPanel = new JPanel();
         portPanel = new JPanel();
         namePanel = new JPanel();
         userPanel = new JPanel();
         passPanel = new JPanel();
+
+
         addressPanel.setLayout(new BoxLayout(addressPanel, BoxLayout.X_AXIS));
         portPanel.setLayout(new BoxLayout(portPanel, BoxLayout.X_AXIS));
         namePanel.setLayout(new BoxLayout(namePanel, BoxLayout.X_AXIS));
@@ -67,7 +65,10 @@ public class SettingsFrame extends JFrame{
 
         changeConnectionButton = new JButton("Change Server");
         changeConnectionButton.addActionListener(changeConnection());
-        // changeConnectionPanel = new JPanel();
+
+        adultFilter = new JCheckBox("Turn on NSFW filter");
+        adultFilter.setHorizontalAlignment(JCheckBox.CENTER);
+        adultFilter.addActionListener(turnOnAdultFilter());
 
         addressPanel.add(addressLabel);
         addressPanel.add(address);
@@ -80,64 +81,24 @@ public class SettingsFrame extends JFrame{
         passPanel.add(passwordLabel);
         passPanel.add(password);
 
-        add(addressLabel);
-        add(address);
-        add(portLabel);
-        add(port);
-        add(nameLabel);
-        add(databaseName);
-        add(usernameLabel);
-        add(username);
-        add(passwordLabel);
-        add(password);
+        addressPanel.setBorder(new EmptyBorder(2,15,0,15));
+        portPanel.setBorder(new EmptyBorder(2,15,0,15));
+        namePanel.setBorder(new EmptyBorder(2,15,0,15));
+        userPanel.setBorder(new EmptyBorder(2,15,0,15));
+        passPanel.setBorder(new EmptyBorder(2,15,0,15));
+        add(addressPanel);
+        add(portPanel);
+        add(namePanel);
+        add(userPanel);
+        add(passPanel);
+
+        changeConnectionPanel.setBorder(new EmptyBorder(0,10,0,10));
         add(changeConnectionButton);
-//        layout.setHorizontalGroup(layout.createSequentialGroup()
-//                .addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING))
-//                .addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)));
-//
-//        layout.setVerticalGroup(layout.createSequentialGroup()
-//                .addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
-//                        .addComponent(addressLabel)
-//                        .addComponent(portLabel)
-//                        .addComponent(nameLabel)
-//                        .addComponent(usernameLabel)
-//                        .addComponent(passwordLabel))
-//                .addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
-//                        .addComponent(address)
-//                        .addComponent(port)
-//                        .addComponent(databaseName)
-//                        .addComponent(username)
-//                        .addComponent(password))
-//        );
-
-        //changeConnectionPanel.setLayout(layout);
-//        gbc.fill = GridBagConstraints.BOTH;
-//        gbc.weightx = 0.5;
-//        gbc.gridwidth = 3;
-//        gbc.gridx = 1;
-//        gbc.gridy = 0;
-        //changeConnectionPanel.add(changeConnectionLabel, gbc);
-        // changeConnectionPanel.add(changeConnectionLabel);
-//        gbc.fill = GridBagConstraints.BOTH;
-//        gbc.weightx = 0.5;
-//        gbc.gridwidth = 1;
-//        gbc.gridx = 1;
-//        gbc.gridy = 1;
-//        //changeConnectionPanel.add(changeConnectionTextField, gbc);
-
-//        gbc.fill = GridBagConstraints.HORIZONTAL;
-//        gbc.weightx = 0;
-//        gbc.gridwidth = 1;
-//        gbc.gridx = 2;
-//        gbc.gridy = 1;
-        //changeConnectionPanel.add(changeConnectionButton,gbc);
-
-        //add(changeConnectionPanel);
-        //pack();
-
+        add(adultFilter);
 
         setSize(800,300);
-        setVisible(true);
+        setDefaultCloseOperation(HIDE_ON_CLOSE);
+        //setVisible(true);
     }
 
     /**
@@ -149,33 +110,35 @@ public class SettingsFrame extends JFrame{
             @Override
             public void actionPerformed(ActionEvent e) {
 
-                /*
-                Split and try to connect to new server using the input in the textfield. Catch any exceptions it
-                encounters and create a dialog box that will warn the user that their input is invalid.
+                /**
+                 * Split and try to connect to new server using the input in the textfield. Catch any exceptions it
+                 * encounters and create a dialog box that will warn the user that their input is invalid.
                  */
                 try {
                     newConnectionServer.connectTo(address.getText(), Integer.parseInt(port.getText()),
-                            databaseName.getText(), username.getText(), password.getText());//TODO fix GUI,  implement adultFilter
+                            databaseName.getText(), username.getText(), password.getText());
 
                 } catch (Exception s) {
                     JDialog error = new JDialog(SettingsFrame.this, "Error!");
                     error.setModalityType(Dialog.ModalityType.APPLICATION_MODAL);
                     JPanel panel = new JPanel();
-                    BoxLayout boxLayout = new BoxLayout(panel, BoxLayout.PAGE_AXIS);
+                    BoxLayout boxLayout = new BoxLayout(panel, BoxLayout.Y_AXIS);
                     panel.setLayout(boxLayout);
                     panel.setBorder(new EmptyBorder(new Insets(15,20,15,20)));
 
                     JButton okButton = new JButton("OK");
-                    JLabel errorLabel = new JLabel("Invalid connection input.\n" +
-                            "Make sure all fields are correct.");
+                    JLabel errorLabel = new JLabel("Something went wrong!\n" +
+                            " Make sure all fields are correct.");
 
-                    okButton.addActionListener(new ActionListener() {//closes the window when ok button pressed
+                    //closes the window when ok button pressed
+                    okButton.addActionListener(new ActionListener() {
                         @Override
                         public void actionPerformed(ActionEvent e) {
                             error.dispose();
                         }
                     });
 
+                    okButton.setAlignmentX(Component.CENTER_ALIGNMENT);
                     errorLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
                     panel.add(errorLabel);
                     panel.add(okButton);
@@ -186,6 +149,40 @@ public class SettingsFrame extends JFrame{
                     error.setVisible(true);
                 }
 
+            }
+        };
+    }
+
+    /**
+     * action listener for adultFilter checkbox
+     * @return ActionListener for the checkbox button to use
+     */
+    private ActionListener turnOnAdultFilter(){
+        return new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                /**
+                 * set adultFilter bool to true if box checked
+                 */
+                if(adultFilter.isSelected()) {
+                    adultFilter.setSelected(true);
+                    try {
+                        newConnectionServer.setAdultFilterBool(true);
+                    } catch(Exception s) {
+                        System.out.println("Adult filter when checked is throwing error.");
+                    }
+                }
+                /**
+                 * set adultFilter bool to false if box checked
+                 */
+                else{
+                    adultFilter.setSelected(false);
+                    try{
+                        newConnectionServer.setAdultFilterBool(false);
+                    }catch (Exception s){
+                        System.out.println("Adult filter when not checked is throwing error.");
+                    }
+                }
             }
         };
     }

@@ -13,10 +13,12 @@ public class ProductionPane extends DetailPane {
     private ProductionResult result;
     private JList<PersonResult> list;
     private DefaultListModel<PersonResult> listModel;
+    private boolean adultFilterBool = false;
 
-    public ProductionPane(Window frame, ProductionResult result) {
+    public ProductionPane(Window frame, ProductionResult result, boolean adultFilterBool) {
         super(frame);
         this.result = result;
+        this.adultFilterBool = adultFilterBool;
 
         //Construct entire pane
         constructUI();
@@ -184,7 +186,7 @@ public class ProductionPane extends DetailPane {
         public void valueChanged(ListSelectionEvent e) {
             if(!list.isSelectionEmpty() && !list.getValueIsAdjusting()) {
                 PersonResult result = list.getSelectedValue();
-                DetailPane newPersonPane = new PersonPane(windowFrame, result);
+                DetailPane newPersonPane = new PersonPane(windowFrame, result, result.getAdultFilter());
                 windowFrame.pushScreen(newPersonPane);
             }
         }

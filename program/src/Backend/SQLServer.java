@@ -4,13 +4,15 @@ import com.mysql.jdbc.Connection;
 import com.mysql.jdbc.Statement;
 import com.mysql.jdbc.jdbc2.optional.MysqlDataSource;
 
-import javax.swing.plaf.nimbus.State;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
+//import java.sql.*;
+
 /**
  * Interact with physical server with this class
+ * @author Tyree Mitchell, Phillip Zubov
  */
 public class SQLServer {
 
@@ -18,6 +20,7 @@ public class SQLServer {
     private MysqlDataSource dataSource;
     private Statement stmt;
     private ResultSet result;
+    private boolean adultFilterBool = false;
 
 
     /**
@@ -83,23 +86,34 @@ public class SQLServer {
 
         ArrayList<ProductionResult> list = new ArrayList<>();
         while ( result.next() ) {
-            String type = "Movie";
-            String ID = result.getString( "prodID" );
-            String description = result.getString( "primaryTitle");
-            String originalTitle = result.getString("originalTitle");
-            int isAdult = result.getInt("isAdult");
-            int startYear = result.getInt("startYear");
-            int endYear = result.getInt("endYear");
-            int runTime = result.getInt("runTime");
-            ProductionResult result = new ProductionResult(ID, type, description, originalTitle,
-                    isAdult, startYear, endYear, runTime, this);
-            list.add(result);
+                String type = "Movie";
+                String ID = result.getString("prodID");
+                String description = result.getString("primaryTitle");
+                String originalTitle = result.getString("originalTitle");
+                int isAdult = result.getInt("isAdult");
+                int startYear = result.getInt("startYear");
+                int endYear = result.getInt("endYear");
+                int runTime = result.getInt("runTime");
+                ProductionResult result = new ProductionResult(ID, type, description, originalTitle,
+                        isAdult, startYear, endYear, runTime, this);
+                if(!adultFilterBool)
+                    list.add(result);
+                else if(adultFilterBool && isAdult == 0)
+                    list.add(result);
+
+
         }
 
         System.out.println("Built "+list.size()+" items\n");
         return list;
     }
 
+    /**
+     * finds all the people who have search term in their name
+     * @param query search term
+     * @return list of people objects
+     * @throws SQLException
+     */
     public ArrayList<PersonResult> personRead(String query) throws SQLException {
         stmt = (Statement) conn.createStatement();
         result = stmt.executeQuery("SELECT * FROM Person WHERE primaryName LIKE '%"+query+"%' LIMIT 50;" );
@@ -127,5 +141,21 @@ public class SQLServer {
     public ResultSet executeStatement(String executableStatement) throws SQLException {
         stmt = (Statement) conn.createStatement();
         return stmt.executeQuery(executableStatement);
+    }
+
+    /**
+     * sets the adult filter to the param
+     * @param x
+     */
+    public void setAdultFilterBool(boolean x){
+        adultFilterBool = x;
+    }
+
+    /**
+     * get adultfilter boolean
+     * @return adultFilterBool
+     */
+    public boolean getAdultFilterBool(){
+        return adultFilterBool;
     }
 }

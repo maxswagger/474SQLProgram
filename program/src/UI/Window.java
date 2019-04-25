@@ -19,15 +19,24 @@ import java.util.Stack;
 /**
  * UI.Window class which contains the main window and starting page
  * to search database and see results
+ * 4/19/2019
+ * @author Tyree Mitchell, Max Samoylov
+ *
+ *
+ * Added functionality to settings button, as well as implemented some things for adult filter.
+ * 4/24/2019
+ * @author Phillip Zubov
+ *
  */
 public class Window extends JFrame {
 
     private SQLServer server;
+    private  SettingsFrame settingsFrame;
 
     private JPanel topPanel;
     private JButton searchButton;
     private JTextField searchField;
-    private JButton settingsButton;
+    private JButton settingsButton, homeButton;
     private JPanel mainPanel;
     private JPanel currentPanel;
 
@@ -43,6 +52,7 @@ public class Window extends JFrame {
      */
     public Window(){
         server = new SQLServer();
+        settingsFrame = new SettingsFrame(server);
         try {
             server.connectTo("71.63.48.66", 3306, "imdb", "program", "Yeehaw420$");
         } catch (SQLException ignored) {}
@@ -97,6 +107,52 @@ public class Window extends JFrame {
     }
 
     /**
+     * action listener for the settings button
+     * @return
+     */
+    private ActionListener settingsMenu() {
+        return new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                disableMainWindow(true);
+               // SettingsFrame settingsFrame = new SettingsFrame(server);
+                settingsFrame.setVisible(true);
+
+                settingsFrame.addWindowListener(new WindowListener() {
+                    @Override
+                    public void windowOpened(WindowEvent e) {}
+                    @Override
+                    public void windowClosing(WindowEvent e) {
+                        disableMainWindow(false);
+                    }
+                    @Override
+                    public void windowClosed(WindowEvent e) {}
+                    @Override
+                    public void windowIconified(WindowEvent e) {}
+                    @Override
+                    public void windowDeiconified(WindowEvent e) {}
+                    @Override
+                    public void windowActivated(WindowEvent e) {}
+                    @Override
+                    public void windowDeactivated(WindowEvent e) {}
+                });
+            }
+        };
+    }
+
+    /**
+     * helper method for settings button, disables user from using the main window
+     * @param x is a boolean that when false sets the main window to be enabled and vice versa
+     */
+    public void disableMainWindow(boolean x){
+        if(x)
+            this.setEnabled(false);
+        else
+            this.setEnabled(true);
+    }
+
+
+    /**
      * function to populate the results into the list
      * @param list
      */
@@ -139,6 +195,7 @@ public class Window extends JFrame {
         mainPanel.setVisible(true);
         add(mainPanel);
     }
+
 
     /**
      *  Push a new screen onto the stack and set it as the current screen.
@@ -184,10 +241,10 @@ public class Window extends JFrame {
 
                 if(selectedResult.getType().equals("Movie")) {
                     ProductionResult netResult = (ProductionResult) selectedResult;
-                    dPane = new ProductionPane(getFrame(), (ProductionResult) netResult);
+                    dPane = new ProductionPane(getFrame(), (ProductionResult) netResult, server.getAdultFilterBool());
                 } else if(selectedResult.getType().equals("Person")) {
                     PersonResult netResult = (PersonResult) selectedResult;
-                    dPane = new PersonPane(getFrame(), (PersonResult) netResult);
+                    dPane = new PersonPane(getFrame(), (PersonResult) netResult, server.getAdultFilterBool());
                 }
 
                 currentPanel = dPane;
@@ -200,47 +257,4 @@ public class Window extends JFrame {
         }
     }
 
-    /**
-     * action listener for the settings button
-     * @return
-     */
-    private ActionListener settingsMenu() {
-        return new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent actionEvent) {
-                disableMainWindow(true);
-                SettingsFrame settingsFrame = new SettingsFrame(server);
-
-                settingsFrame.addWindowListener(new WindowListener() {
-                    @Override
-                    public void windowOpened(WindowEvent e) {}
-                    @Override
-                    public void windowClosing(WindowEvent e) {
-                        disableMainWindow(false);
-                    }
-                    @Override
-                    public void windowClosed(WindowEvent e) {}
-                    @Override
-                    public void windowIconified(WindowEvent e) {}
-                    @Override
-                    public void windowDeiconified(WindowEvent e) {}
-                    @Override
-                    public void windowActivated(WindowEvent e) {}
-                    @Override
-                    public void windowDeactivated(WindowEvent e) {}
-                });
-            }
-        };
-    }
-
-    /**
-     * helper method for settings button, disables user from using the main window
-     * @param x is a boolean that when false sets the main window to be enabled and vice versa
-     */
-    public void disableMainWindow(boolean x){
-        if(x)
-            this.setEnabled(false);
-        else
-            this.setEnabled(true);
-    }
 }

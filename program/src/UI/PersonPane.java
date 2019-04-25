@@ -15,13 +15,24 @@ import javax.swing.text.html.HTMLEditorKit;
 import java.awt.*;
 import java.io.IOException;
 
+/**
+ * 4/20/2019
+ * @author Tyree Mitchell
+ *
+ * 4/24/2019
+ * @author Phillip Zubov
+ * Added some adultfilterbool stuff.
+ */
 public class PersonPane extends DetailPane {
     PersonResult result;
     private JList<ProductionResult> prodList;
+    private boolean adultFilterBool = false;
 
-    public PersonPane(Window frame, PersonResult result) {
+    public PersonPane(Window frame, PersonResult result, boolean adultFilterBool) {
         super(frame);
         this.result = result;
+        this.adultFilterBool = adultFilterBool;
+        this.result.setAdultFilter(this.adultFilterBool);
 
         constructUI();
         buildProductionPanel();
@@ -147,7 +158,7 @@ public class PersonPane extends DetailPane {
         public void valueChanged(ListSelectionEvent e) {
             if(!prodList.isSelectionEmpty() && !prodList.getValueIsAdjusting()) {
                 ProductionResult result = prodList.getSelectedValue();
-                DetailPane newProductionPane = new ProductionPane(windowFrame, result);
+                DetailPane newProductionPane = new ProductionPane(windowFrame, result, adultFilterBool);
                 windowFrame.pushScreen(newProductionPane);
             }
         }

@@ -17,7 +17,6 @@ public class ProductionResult extends TupleResult {
     private int runTime;
 
 
-
     private SQLServer server;
 
     private String genre;
@@ -47,6 +46,7 @@ public class ProductionResult extends TupleResult {
         averageRating = 0;
         numberVotes = 0;
     }
+
 
     public String versionsString() {
         String returnString = "";
@@ -184,6 +184,7 @@ public class ProductionResult extends TupleResult {
     public int getRunTime() {
         return runTime;
     }
+
 
     public ArrayList<PersonResult> getCastCrew() {
         return castCrew;
