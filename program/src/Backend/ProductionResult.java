@@ -6,7 +6,7 @@ import java.util.ArrayList;
 
 /**
  * A modified version of TupleResult meant for holding various data about entertainment titles.
- * Author: Tyree Mitchell
+ * @author Tyree Mitchell
  */
 public class ProductionResult extends TupleResult {
 
