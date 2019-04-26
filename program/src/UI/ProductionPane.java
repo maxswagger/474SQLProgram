@@ -9,6 +9,9 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import java.awt.*;
 
+/**
+* Author: Tyree Mitchell
+*/
 public class ProductionPane extends DetailPane {
     private ProductionResult result;
     private JList<PersonResult> list;
