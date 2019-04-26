@@ -20,7 +20,7 @@ import java.util.Stack;
  * UI.Window class which contains the main window and starting page
  * to search database and see results
  * 4/19/2019
- * @author Maksim Samoylov, Tyree Mitchell, Phillip Zubov
+ * @author Maksim Samoylov, Tyree Mitchell, Phillip Zubov, Buddy Godfrey
  */
 public class Window extends JFrame {
 
