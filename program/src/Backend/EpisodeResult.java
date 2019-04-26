@@ -1,5 +1,8 @@
 package Backend;
 
+/**
+ * @author Max, Buddy
+ */
 public class EpisodeResult extends TupleResult {
     private int seasonNumber;
     private int episodeNumber;
