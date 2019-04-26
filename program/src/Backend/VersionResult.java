@@ -1,5 +1,9 @@
 package Backend;
 
+
+/**
+ * @author Max, Buddy
+ */
 public class VersionResult extends TupleResult {
     private String regionID;
     private String languageID;
