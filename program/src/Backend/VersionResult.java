@@ -2,7 +2,7 @@ package Backend;
 
 
 /**
- * @author Max, Buddy
+ * @author Tyree Mitchell, Max, Buddy
  */
 public class VersionResult extends TupleResult {
     private String regionID;

@@ -1,7 +1,7 @@
 package Backend;
 
 /**
- * @author Max, Buddy
+ * @author Tyree Mitchell, Max, Buddy
  */
 public class EpisodeResult extends TupleResult {
     private int seasonNumber;
