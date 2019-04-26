@@ -14,7 +14,7 @@ import java.util.ArrayList;
 
 /**
  * Interact with physical server with this class
- * @author Maskim Samoylov, Tyree Mitchell, Phillip Zubov
+ * @author Maskim Samoylov, Tyree Mitchell, Phillip Zubov, Buddy Godfrey
  */
 public class SQLServer {
 
