@@ -1,6 +1,8 @@
 # CS 474 SQL Project
 Authors: Max Samoylov, Phillip Zubov, Tyree Mitchell, Buddy Godfrey
 
+Link to Scrum board: https://app.vivifyscrum.com/boards/58638
+
 ## About
   This project is a front-end application for an "IMDB clone" database for JMU's CS 474 Databases class.
 A majority of the semester was spent creating the database schema, ER diagram and then the actual database of an IMDB clone database.
