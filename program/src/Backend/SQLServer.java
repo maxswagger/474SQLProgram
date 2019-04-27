@@ -1,16 +1,13 @@
 package Backend;
 
-import com.mysql.jdbc.CommunicationsException;
 import com.mysql.jdbc.Connection;
 import com.mysql.jdbc.Statement;
 import com.mysql.jdbc.jdbc2.optional.MysqlDataSource;
 
-import java.net.ConnectException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-//import java.sql.*;
 
 /**
  * Interact with physical server with this class

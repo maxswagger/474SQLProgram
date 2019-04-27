@@ -1,17 +1,9 @@
 package UI;
 
-import Backend.PersonResult;
-import Backend.ProductionResult;
-import Backend.TupleResult;
-
 import javax.swing.*;
-import javax.swing.border.Border;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.sql.ResultSet;
 
 /**
  * Main class for building and displaying a rich content pane for search results
