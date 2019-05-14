@@ -24,6 +24,6 @@ public class Main {
         window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         window.setSize(800,600);
         window.setVisible(true);
-        server.connectTo("71.63.48.66", 3306, "imdb", "program", "Yeehaw420$");
+        server.connectTo("localhost", 3306, "imdb", "root", "");
     }
 }
