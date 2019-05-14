@@ -21,7 +21,7 @@ public class SQLServer {
     private ResultSet result;
     private boolean adultFilterBool = false;
 
-    String address = "71.63.48.66";
+    String address = "localhost";
     int port = 3306;
     String database = "IMDB";
     String user = "program";
@@ -53,7 +53,7 @@ public class SQLServer {
         dataSource.setDatabaseName(database);
         dataSource.setUser(user);
         dataSource.setPassword(pass);
-        dataSource.setServerName(address); // "mysql.cs.jmu.edu" or "71.63.48.66" or "10.0.0.154"
+        dataSource.setServerName(address); 
 
         System.out.println("Connecting...");
         try {
